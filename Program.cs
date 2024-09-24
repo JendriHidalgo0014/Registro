@@ -1,10 +1,21 @@
 using JendriHidalgo_Ap1_P1.Components;
+using JendriHidalgo_Ap1_P1.DAL;
+using JendriHidalgo_Ap1_P1.Services;
+using Microsoft.EntityFrameworkCore;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+var ConStr = builder.Configuration.GetConnectionString("ConStr");
+builder.Services.AddDbContext<Context>(c => c.UseSqlite(ConStr));
+
+builder.Services.AddScoped<RegistroService>();
 
 var app = builder.Build();
 
