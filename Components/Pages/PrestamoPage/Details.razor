@@ -1,0 +1,43 @@
+﻿@page "/Prestamo/Details"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject PrestamoService prestamoService
+
+<h3>Detalles del Prestamo</h3>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Deudor ID</dt>
+                <dd class="col-sm-9">@prestamos.DeudorId</dd>
+
+                <dt class="col-sm-3">Deudor</dt>
+                <dd class="col-sm-9">@prestamos.Deudor</dd>
+                
+                <dt class="col-sm-3">Concepto</dt>
+                <dd class="col-sm-9">@prestamos.Concepto</dd>
+
+                <dt class="col-sm-3">Monto</dt>
+                <dd class="col-sm-9">@prestamos.Monto.ToString("C")</dd>
+            </dl>
+
+            <button class="btn btn-secondary" @Onclick="OnCancel">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+    public Prestamo prestamos = new Prestamo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        prestamos = await prestamoService.Buscar(id); // Reemplazado ObtenerPorId por Buscar
+    }
+
+    private void OnCancel()
+    {
+        Navigation.NavigateTo("/Prestamo/Index");
+    }
+}

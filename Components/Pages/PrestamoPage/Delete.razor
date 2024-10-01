@@ -1,0 +1,49 @@
+﻿@page "/Prestamo/Delete"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject PrestamoService prestamoService
+
+<h3>Eliminar Prestamo</h3>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Deudor ID</dt>
+                <dd class="col-sm-9">@prestamos.DeudorId</dd>
+
+                <dt class="col-sm-3">Deudor</dt>
+                <dd class="col-sm-9">@prestamos.Deudor</dd>
+
+                <dt class="col-sm-3">Concepto</dt>
+                <dd class="col-sm-9">@prestamos.Concepto</dd>
+
+                <dt class="col-sm-3">Monto</dt>
+                <dd class="col-sm-9">@prestamos.Monto.ToString("C")</dd>
+            </dl>
+            <button class="btn btn-danger" @onclick="EliminarAsync">Eliminar</button>
+            <button class="btn btn-secondary" @onclick="OnCancel">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+    public Prestamo prestamos = new Prestamo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        prestamos = await prestamoService.Buscar(id);
+    }
+
+    private async Task EliminarAsync()
+    {
+        await prestamoService.Eliminar(id);
+        Navigation.NavigateTo("/Prestamo/Index");
+    }
+
+    private void OnCancel()
+    {
+        Navigation.NavigateTo("/Prestamo/Index");
+    }
+}

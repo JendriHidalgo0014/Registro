@@ -1,0 +1,56 @@
+﻿@page "/Prestamo/Edit"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject PrestamoService prestamoService
+
+<h3>Editar Prestamo</h3>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="DeudorId">Deudor ID</label>
+                <input type="text" class="form-control" id="DeudorId" @bind="prestamos.DeudorId" disabled />
+            </div>
+
+            <div class="form-group">
+                <label for="Deudor">Nombre</label>
+                <input type="text" class="form-control" id="nombre" @bind="prestamos.Deudor" />
+            </div>
+
+            <div class="form-group">
+                <label for="Concepto">Concepto</label>
+                <textarea class="form-control" id="Concepto" @bind="prestamos.Concepto"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="Monto">Monto</label>
+                <input type="number" class="form-control" id="Monto" @bind="prestamos.Monto" />
+            </div>
+
+            <button class="btn btn-primary" @onclick="Guardar">Guardar</button>
+            <button class="btn btn-secondary" @onclick="OnCancel">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+    public Prestamo prestamos = new Prestamo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        prestamos = await prestamoService.Buscar(id);
+    }
+
+    private async Task Guardar()
+    {
+        await prestamoService.Modificar(prestamos);
+        Navigation.NavigateTo("/Prestamo/Index");
+    }
+
+    private void OnCancel()
+    {
+        Navigation.NavigateTo("/Prestamo/Index");
+    }
+}

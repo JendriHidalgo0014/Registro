@@ -1,0 +1,85 @@
+﻿@page "/Prestamo/Index"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject PrestamoService prestamoService
+
+<PageTitle>Lista de Prestamos</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title">Registro</h5>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end justify-content-md-start mt-3 mt-md-0">
+            <a href="/Prestamo/Create" class="btn btn-success bi bi-plus-square-fill"> Crear</a>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-light">
+                <thead class="table table-striped text-center table-bordered mt-3 bg-dark text-white">
+                    <tr>
+                        <th>DeudorId</th>
+                        <th>Deudor</th>
+                        <th>Concepto</th>
+                        <th>Monto</th>
+                        <th>Ver</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prestamo in prestamos)
+                    {
+                        <tr>
+                            <td class="text-center">@prestamo.DeudorId</td>
+                            <td class="text-center">@prestamo.Deudor</td>
+                            <td class="text-center">@prestamo.Concepto</td>
+                            <td class="text-center">@prestamo.Monto.ToString("C")</td>
+                            <td class="text-center">
+                                <a href="/Prestamo/Details/@prestamo.DeudorId" class="btn btn-info text-white bi bi-eye-fill"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/Prestamo/Edit/@prestamo.DeudorId" class="btn btn-secondary text-white bi bi-pencil-fill"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/Prestamo/Delete/@prestamo.DeudorId" class="btn btn-danger bi bi-trash-fill"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Prestamo> prestamos = new List<Prestamo>();
+    public string filtro = "id";
+    public string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        prestamos = await prestamoService.Listar(t => true);
+    }
+
+    private async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            if (filtro == "DeudorId" && int.TryParse(valorFiltro, out int DeudorId))
+            {
+                prestamos = await prestamoService.Listar(p => p.DeudorId == DeudorId);
+            }
+            else if (filtro == "Deudor")
+            {
+                prestamos = await prestamoService.Listar(c => c.Deudor.ToLower().Contains(valorFiltro.ToLower()));
+            }
+        }
+        else
+        {
+            prestamos = await prestamoService.Listar(t => true);
+        }
+    }
+}
+
