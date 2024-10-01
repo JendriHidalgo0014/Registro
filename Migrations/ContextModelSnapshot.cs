@@ -16,19 +16,26 @@ namespace JendriHidalgo_Ap1_P1.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("JendriHidalgo_Ap1_P1.Models.Registro", b =>
+            modelBuilder.Entity("JendriHidalgo_Ap1_P1.Models.Prestamo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("DeudorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Concepto")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Deudor")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.ToTable("Registro");
+                    b.Property<int>("Monto")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("DeudorId");
+
+                    b.ToTable("Prestamo");
                 });
 #pragma warning restore 612, 618
         }
