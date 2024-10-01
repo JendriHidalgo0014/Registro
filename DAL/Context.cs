@@ -9,7 +9,7 @@ namespace JendriHidalgo_Ap1_P1.DAL
         {
         }
 
-        public DbSet<Registro> Registro { get; set; }
+        public DbSet<Prestamo> Prestamo { get; set; }
 
     }
 }
